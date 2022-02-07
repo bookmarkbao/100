@@ -2,18 +2,22 @@ import { chromium } from 'playwright'
 
 async function run() {
   const browser = await chromium.launch({ headless: false })
-  const context = await browser.newContext({
-    viewport: {
-      width: 960,
-      height: 500,
-    },
-    deviceScaleFactor: 2,
-  })
+  // const context = await browser.newContext({
+  //   viewport: {
+  //     width: 960,
+  //     height: 500,
+  //   },
+  //   deviceScaleFactor: 2,
+  // })
+
+  const context = await browser.newContext()
+
 
   async function take(no: string, retry = 3, delay = 1000, take = 1, query = '', delayBetweenShot = 0, prefix = '') {
     for (let i = 0; i < retry; i++) {
       const page = await context.newPage()
-      await page.goto(`http://localhost:3333/${no}?shot=true${query}`)
+      await page.goto(`https://bm.demopai.com`)
+      // await page.goto(`http://localhost:3333/${no}?shot=true${query}`)
       await page.waitForTimeout(delay)
       for (let j = 0; j < take; j++) {
         await page.screenshot({ path: `scripts/screenshots/${prefix}${no}-${i}-${j}.png` })
@@ -27,7 +31,8 @@ async function run() {
 
   async function open(no: string, query = '') {
     const page = await context.newPage()
-    await page.goto(`http://localhost:3333/${no}?shot=true${query}`)
+    await page.goto(`https://www.baidu.com`)
+    // await page.goto(`http://localhost:3333/${no}?shot=true${query}`)
     await page.waitForEvent('close')
     return page
   }
@@ -77,8 +82,22 @@ async function run() {
   // await take('035', 20, 8000)
   // await take('036', 1, 1000)
   await take('037', 1, 1000)
+  // await open('037')
 
   await browser.close()
 }
 
 run()
+
+
+async function run1(){
+  const browser = await chromium.launch({ headless: false })
+  // const browser = await playwright.firefox.launch();  // Or 'chromium' or 'webkit'.
+  // Create a new incognito browser context.
+  const context = await browser.newContext();
+  // Create a new page in a pristine context.
+  const page = await context.newPage();
+  await page.goto('https://www.baidu.com');
+}
+
+// run1()
